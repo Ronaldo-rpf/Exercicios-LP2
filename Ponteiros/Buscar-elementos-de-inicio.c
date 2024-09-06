@@ -3,7 +3,7 @@
 #include <time.h>
 
 void preencherA(int *, int, int, int);
-int buscar (int *, int, int);
+int buscarIni (int *, int, int, int);
 
 int main () {
     int n, elemento, posicao;
@@ -23,7 +23,7 @@ int main () {
     printf("Qual elemento deseja buscar: ");
     scanf("%d", &elemento);
 
-    posicao = buscar (vetor, n, elemento);
+    posicao = buscarIni (vetor, n, 0, elemento);
     if (posicao == -1){
         printf("Elemento nao encontrado no array.\n\n");
     }
@@ -43,12 +43,12 @@ void preencherA (int vetor[], int n, int min, int max){
     preencherA(vetor, n-1, min, max);
 }
 
-int buscar (int vetor[], int n, int elemento){
-    if (n == 0){
+int buscarIni (int vetor[], int n, int i, int elemento){
+    if (i > n-1){
         return (-1);
     }
-    if (vetor[n-1] == elemento){
-        return (n-1);
+    if (vetor[i] == elemento){
+        return i;
     }
-    return buscar (vetor, n-1, elemento);
+    return buscarIni (vetor, n, i+1, elemento);
 }
