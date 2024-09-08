@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Ronaldo/OneDrive/Documentos/LP2/Lista_02",
-      "program": "c:/Users/Ronaldo/OneDrive/Documentos/LP2/Lista_02/build/Debug/outDebug",
+      "cwd": "c:/Users/Ronaldo/OneDrive/Documentos/LP2/Lista_02/Questao-05",
+      "program": "c:/Users/Ronaldo/OneDrive/Documentos/LP2/Lista_02/Questao-05/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
