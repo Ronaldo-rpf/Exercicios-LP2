@@ -3,7 +3,7 @@
 #include <time.h>
 #include "imagens.h"
 
-void somaPorLinhas_R(unsigned char img[480][10], int soma[480], int i, int j, int aux);
+void somaPorLinhas_R(unsigned char img[480][10], int soma[480], int i, int j);
 void geraImgGrey_R(unsigned char img[480][10], unsigned char tipo, int i, int j);
 
 int main() {
@@ -17,7 +17,7 @@ int main() {
     geraImgGrey_R(img, tipo, 479, 9);
 
     printf("Soma: ");
-    somaPorLinhas_R(img, soma, 479, 9, 479);
+    somaPorLinhas_R(img, soma, 479, 9);
 
     printf("%d\n\n", soma[1]);
 
@@ -36,14 +36,15 @@ void geraImgGrey_R(unsigned char img[480][10], unsigned char tipo, int i, int j)
     geraImgGrey_R(img, tipo, i, j - 1);
 }
 
-void somaPorLinhas_R(unsigned char img[480][10], int soma[480], int i, int j, int aux){
+void somaPorLinhas_R(unsigned char img[480][10], int soma[480], int i, int j){
     if (j < 0){
-        somaPorLinhas_R(img, soma, i-1, 9, aux-1);
+        somaPorLinhas_R(img, soma, i-1, 9);
         return;
     }
     if (i < 0){
         return;
     }    
-    soma[aux] += img[i][j];
-    somaPorLinhas_R(img, soma, i, j-1, aux);
+    soma[i] += img[i][j];
+    somaPorLinhas_R(img, soma, i, j-1);
 }
+
