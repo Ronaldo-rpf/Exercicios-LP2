@@ -9,7 +9,7 @@ int main (){
 
     matriz = (int **) calloc (i, sizeof(int *));
     for (int aux=0; aux<i; aux++){
-        matriz[i] = (int *) calloc (j, sizeof(int));
+        matriz[aux] = (int *) calloc (j, sizeof(int));
     }
 
     for (int aux=0; aux < i; aux++){
@@ -27,5 +27,6 @@ int main (){
     }
     free(matriz);
 
+    system("PAUSE");
     return 0;
 }
