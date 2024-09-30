@@ -1,76 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-unsigned char* geraArray1D(int tam);
-
-int main (){
-    unsigned char *v;
-
-    v = geraArray1D (10);
-
-    for (int i=0; i < 10; i++){
-        printf("%u", v[i]);
-    }
-
-    free (v);
-    return 0;
-}
-
-unsigned char* geraArray1D(int tam){
-    return calloc(tam, sizeof(unsigned char));
- }
-
-
- #include <stdio.h>
-#include <stdlib.h>
-
-unsigned char** geraArray2D(int nLin, int nCol);
+#include <time.h>
+#include "procimg.h"
 
 int main (){
+
+    srand(time(NULL));
+
     unsigned char **v;
 
     v = geraArray2D (5, 10);
 
     for (int i=0; i < 5; i++){
         for(int j=0; j < 10; j++){
-            printf("%u", v[i][j]);
-        }
-        printf("\n");
-    }
-
-    for (int i=0; i < 5; i++){
-        free (v[i]);
-    }
-    free(v);
-
-    return 0;
-}
-
-unsigned char** geraArray2D(int nLin, int nCol){
-    unsigned char **aux;
-    aux = (unsigned char**) calloc (nLin, sizeof(unsigned char*));
-    for(int i=0; i < nLin; i++){
-        aux[i] = (unsigned char*) calloc (nCol, sizeof(unsigned char));
-    }
-    return aux;
-}
-
-
-
-#include <stdio.h>
-#include <stdlib.h>
-
-unsigned char** geraArray2D(int nLin, int nCol);
-void geraImgGreyFull_D(unsigned char** img, int nLin, int nCol, unsigned char pixel);
-
-int main (){
-    unsigned char **v;
-
-    v = geraArray2D (5, 10);
-
-    for (int i=0; i < 5; i++){
-        for(int j=0; j < 10; j++){
-            printf("%u", v[i][j]);
+            printf("%4u", v[i][j]);
         }
         printf("\n");
     }
@@ -84,68 +27,60 @@ int main (){
         printf("\n");
     }
 
-    for (int i=0; i < 5; i++){
-        free (v[i]);
-    }
-    free(v);
-
-    return 0;
-}
-
-unsigned char** geraArray2D(int nLin, int nCol){
-    unsigned char **aux;
-    aux = (unsigned char**) calloc (nLin, sizeof(unsigned char*));
-    for(int i=0; i < nLin; i++){
-        aux[i] = (unsigned char*) calloc (nCol, sizeof(unsigned char));
-    }
-    return aux;
-}
-
-void geraImgGreyFull_D(unsigned char** img, int nLin, int nCol, unsigned char pixel){
-    for (int i=0; i < nLin; i++){
-        for(int j=0; j < nCol; j++){
-            img[i][j] = pixel;
-        }
-    }
-    return;
-}
-
-
-#include <stdio.h>
-#include <stdlib.h>
-
-unsigned char** geraArray2D(int nLin, int nCol);
-int pixelMax_D(unsigned char** img, int nLin, int nCol);
-
-int main (){
-    unsigned char **v, maior;
-
-    v = geraArray2D (5, 10);
+    geraImgGreyB_D (v, 5, 10);
 
     for (int i=0; i < 5; i++){
         for(int j=0; j < 10; j++){
-            if (i=0){
-                v[i][j] = 4;
-            }
-            if (i=1){
-                v[i][j] = 5;
-            }
-            if (i=2){
-                v[i][j] = 6;
-            }
-            if (i=3){
-                v[i][j] = 7;
-            }
-            if (i=4){
-                v[i][j] = 8;
-            }
+            printf("%4u", v[i][j]);
         }
+        printf("\n");
     }
-    v[4][9] = 230;
 
-    maior = pixelMax_D(v, 5, 10);
+    geraImgGrey_D (v, 5, 10, 1);
 
-    printf ("%u\n\n", maior);
+    for (int i=0; i < 5; i++){
+        for(int j=0; j < 10; j++){
+            printf("%4u", v[i][j]);
+        }
+        printf("\n");
+    }
+    
+    printf ("\n%d\n\n", pixelMax_D(v, 5, 10));
+
+    printf ("%d\n\n", pixelMin_D(v, 5, 10));
+
+    unsigned char *somaLin = somaPorLinhas_D(v, 5, 10);
+
+    for (int i = 0; i<5; i++){
+        printf ("%u\n", somaLin[i]);
+    }
+
+    printf("\n");
+
+    unsigned char *somaCol = somaPorColunas_D(v, 5, 10);
+
+    for (int i = 0; i<10; i++){
+        printf ("%u\n", somaCol[i]);
+    }
+
+    printf("\n\n\n");
+    
+
+    printf("%d\n\n", somaTotal_R(v, 5, 10));
+
+    printf ("%d\n\n", quantosPixelsNaInt_D(v, 5, 10, 50));
+
+    printf ("%d\n\n", quantosPixelsAbaixoDeInt_D(v, 5, 10, 50));
+
+    printf ("%d\n\n", quantosPixelsAcimaDeInt_D(v, 5, 10, 50));
+
+
+
+
+
+    free (somaCol);
+
+    free (somaLin);
 
     for (int i=0; i < 5; i++){
         free (v[i]);
@@ -155,23 +90,3 @@ int main (){
     return 0;
 }
 
-unsigned char** geraArray2D(int nLin, int nCol){
-    unsigned char **aux;
-    aux = (unsigned char**) calloc (nLin, sizeof(unsigned char*));
-    for(int i=0; i < nLin; i++){
-        aux[i] = (unsigned char*) calloc (nCol, sizeof(unsigned char));
-    }
-    return aux;
-}
-
-int pixelMax_D(unsigned char** img, int nLin, int nCol){
-    unsigned char maior = img[0][0];
-    for (int i=0; i < nLin; i++){
-        for(int j=0; j < nCol; j++){
-            if (img[i][j] > maior){
-                maior = img[i][j];
-            }
-        }
-    }
-    return maior;
-}
