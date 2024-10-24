@@ -12,7 +12,7 @@ int comparaDatas(data d1, data d2);
 int main (){
     data aniversario1, aniversario2;
 
-    printf("Primeira data:");
+    printf("Primeira data:\n\n");
     printf("Dia do aniversario: ");
     scanf("%d", &aniversario1.dia);
 
@@ -23,7 +23,7 @@ int main (){
     scanf("%d", &aniversario1.ano);
 
 
-    printf("Segunda data:");
+    printf("Segunda data:\n\n");
     printf("Dia do aniversario: ");
     scanf("%d", &aniversario2.dia);
 
@@ -33,11 +33,37 @@ int main (){
     printf("Ano do aniversario: ");
     scanf("%d", &aniversario2.ano);
 
+    int valor = comparaDatas(aniversario1, aniversario2);
 
+    printf("%d\n\n", valor);
 
-
-
-
-    
     return 0;
+}
+
+int comparaDatas(data d1, data d2){
+    if (d1.ano == d2.ano){
+        if (d1.mes > d2.mes){
+            return 1;
+        }
+        else if (d1.mes < d2.mes){
+            return -1;
+        }
+        else{
+            if (d1.dia > d2.dia){
+                return 1;
+            }
+            else if (d1.dia == d2.dia){
+                return 0;
+            }
+            else{
+                return -1;
+            }
+        }
+    }
+    else if(d1.ano > d2.ano){
+        return 1;
+    }
+    else{
+        return -1;
+    }
 }
