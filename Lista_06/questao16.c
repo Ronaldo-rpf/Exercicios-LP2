@@ -67,6 +67,10 @@ tRGB* somaPorLinhasRGB(imgRGB img);
 
 tRGB* somaPorColunasRGB(imgRGB img);
 
+int somaTotalGray(imgGray img);
+
+tRGB somaTotalRGB(imgRGB img);
+
 int main (){
     srand(time(NULL));
     imgRGB imagem;
@@ -84,21 +88,42 @@ int main (){
         printf ("Erro ao preencher matriz.\n\n");    
     }
 
-    tRGB *vetL, *vetC;
+    tRGB *vetL, somas;
     vetL = somaPorLinhasRGB (imagem);
-    vetC = somaPorColunasRGB (imagem);
-    printf("Soma por linhas:\n");
+    printf("Soma por linhas: \n");
     for (int i = 0; i < imagem.nLin; i++){
-        printf ("R: %4u G: %4u B: %4u\n", vetL[i].R, vetL[i].G, vetL[i].B);
+        printf ("R: %3u G: %3u B: %3u\n", vetL[i].R, vetL[i].G, vetL[i].B);
     }
-    printf("\nSoma por colunas:\n");
-    for (int j = 0; j < imagem.nCol; j++){
-        printf ("R: %4u G: %4u B: %4u\n", vetC[j].R, vetC[j].G, vetC[j].B);
-    }
+    somas = somaTotalRGB (imagem);
+
+    printf("\nSoma total dos elementos em cada canal: \nR: %d\nG: %d\nB: %d\n\n", somas.R, somas.G, somas.B);
 
     free(imagem.img);
     free(imagem._img);
     return 0;
+}
+
+tRGB somaTotalRGB(imgRGB img){
+    tRGB *vetL, soma;
+    soma.R = 0;
+    soma.G = 0;
+    soma.B = 0;
+    vetL = somaPorLinhasRGB (img);
+    for (int i = 0; i < img.nLin; i++){
+        soma.R += vetL[i].R;
+        soma.G += vetL[i].G;
+        soma.B += vetL[i].B;
+    }
+    return soma;
+}
+
+int somaTotalGray(imgGray img){
+    int *vetL, soma = 0;
+    vetL = somaPorLinhasGray (img);
+    for (int i = 0; i < img.nLin; i++){
+        soma += vetL[i];
+    }
+    return soma;
 }
 
 tRGB* somaPorColunasRGB(imgRGB img){
