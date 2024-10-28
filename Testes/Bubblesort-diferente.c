@@ -7,7 +7,7 @@ int a[10] = {2,3,4,5,-10,200,150,301,1000,-34};
 
 int main (){
     
-    maxm(1,10);
+    maxm(0,9);
 
     for(int i=0; i<10; i++){
         printf("%d\n", a[i]);
@@ -21,7 +21,7 @@ void maxm (int m, int n){
 
     while (flag){
         flag=0;
-        for (int i=m-1; i<n-1; i++){
+        for (int i=m; i < n; i++){
             if(a[i] < a[i+1]){
                 flag=1;
                 temp = a[i];
