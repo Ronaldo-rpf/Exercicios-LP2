@@ -11,7 +11,7 @@ int fib (int n){
 }
 
 int main (){
-    printf("%d \n\n", fib(3));
+    printf("%d \n\n", fib(0));
 
     return 0;
 }
