@@ -13,3 +13,4 @@ int main (){
     printf("%d \n\n", divisao(0,100,23));
     return 0;
 }
+
