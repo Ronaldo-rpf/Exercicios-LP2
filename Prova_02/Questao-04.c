@@ -33,6 +33,8 @@ int main (){
         printf("\n");
     }
 
+    free(img._img);
+    free(img.img);
     return 0;
 }
 

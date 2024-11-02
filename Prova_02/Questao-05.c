@@ -45,6 +45,10 @@ int main (){
         printf("\n");
     }
 
+    free(img.img);
+    free(img._img);
+    free(picgray.img);
+    free(picgray._img);
     return 0;
 }
 

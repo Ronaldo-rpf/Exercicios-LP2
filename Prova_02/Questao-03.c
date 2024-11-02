@@ -18,6 +18,7 @@ int main (){
         printf("Numerador: %d \nDenominador: %d \nValor da fracao: %f\n\n", vet[i].num, vet[i].den, vet[i].valor);
     }
 
+    free(vet);
     return 0;
 }
 
