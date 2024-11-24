@@ -52,6 +52,19 @@ void lerArquivo(){
     return;
 }
 
+void lerArquivoB(){
+    FILE *arq = fopen("textoB.txt", "rb");
+    if (arq){
+        fscanf(arq, "%d\n", &quant);
+        fread(lista, sizeof(musicas), quant, arq);
+        fclose(arq);
+    }
+    else{
+        printf("Erro ao ler arquivo.\n\n");
+    }
+    return;
+}
+
 void salvarArquivo(){
     FILE *arq = fopen("texto.txt", "w+");
     if (arq){
@@ -69,13 +82,26 @@ void salvarArquivo(){
     return;
 }
 
+void salvarArquivoB(){
+    FILE *arq = fopen("textoB.txt", "wb");
+    if (arq){
+        fprintf(arq, "%d\n", quant);
+        fwrite(lista, sizeof(musicas), quant, arq);
+        fclose(arq);
+    }
+    else{
+        printf("Erro ao abrir arquivo.\n\n");
+    }
+    return;
+}
+
 int main (){
     int aux;
 
-    printf ("O que deseja fazer:\n1 - Adicionar musica;\n2 - Imprimir as musicas cadastradas;\n3 - Ler do arquivo;\n4 - Salvar no arquivo;\n5 - Sair.\n");
+    printf ("O que deseja fazer:\n1 - Adicionar musica;\n2 - Imprimir as musicas cadastradas;\n3 - Ler do arquivo;\n4 - Salvar no arquivo;\n5 - Salvar no arquivo binario;\n6 - Ler do arquivo binario;\n7 - Sair.\n");
     scanf ("%d", &aux);
 
-    while (aux != 5){
+    while (aux != 7){
         switch (aux){
             case 1:
                 cadastrar();
@@ -89,11 +115,17 @@ int main (){
             case 4:
                 salvarArquivo();
                 break;
+            case 5:
+                salvarArquivoB();
+                break;
+            case 6:
+                lerArquivoB();
+                break;
             default:
                 printf("Opcao invalida.\n\n");
                 break;
         }
-        printf ("O que deseja fazer:\n1 - Adicionar musica;\n2 - Imprimir as musicas cadastradas;\n3 - Ler do arquivo;\n4 - Salvar no arquivo;\n5 - Sair.\n");
+        printf ("O que deseja fazer:\n1 - Adicionar musica;\n2 - Imprimir as musicas cadastradas;\n3 - Ler do arquivo;\n4 - Salvar no arquivo;\n5 - Salvar no arquivo binario;\n6 - Ler do arquivo binario;\n7 - Sair.\n");
         scanf ("%d", &aux);
     }
     printf("Fim do programa.\n\n");
