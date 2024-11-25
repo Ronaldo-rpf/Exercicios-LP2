@@ -1,19 +1,18 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-int a[5] = {1,2,3,4,5};
+int main(int argc, char **argv){
+    char str1[50];
+    char str2[50];
+    char cat[100];
 
-int buscaLi_R (int x, int n){
-    if (n==-1){
-        return -1;
-    }
-    if (a[n] == x){
-        return n;
-    }
-    return buscaBi_R (x, n-1);
-}
+    strcpy(str1,"texto da string1"); // insere o texto em str
+    strcpy(str2," | nova parte do texto");
 
-int main (){
-    printf("%d \n\n", buscaLi_R(5,4));
-    return 0;
+    bzero(cat, 100); // limpa a variavel cat
+
+    strcat(cat, str2); // concatena valores em cat
+    strcat(cat, str2);
+
+    puts(cat);
 }

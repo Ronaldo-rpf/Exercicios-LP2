@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef unsigned char uchar;
 
@@ -35,6 +36,7 @@ imgRGB alocaImagemRGB (int nLin, int nCol);
 int saveImgGray (imgGray img, char desc[], char fileName[]);
 
 int main (){
+    int aux;
     imgGray picgray;
     imgRGB picRGB;
     picgray = alocaImagemGray (5, 10);
@@ -47,12 +49,26 @@ int main (){
         printf ("Erro ao alocar imagem RGB.\n\n");
         return 1;
     }
+    char *desc, *fileName;
+    desc = (char*) calloc (80, sizeof(char));
+    fileName = (char*) calloc (30, sizeof(char));
+    printf ("Descricao da imagem: ");
+    fgets (desc, 80, stdin);
+    fflush(stdin);
+    printf ("Nome do arquivo: ");
+    fgets (fileName, 30, stdin);
+    aux = saveImgGray (picgray, desc, fileName);
 
-
-
-
+    if (aux){
+        printf ("Arquivo criado com sucesso.\n\n");
+    }
+    else{
+        printf ("Erro ao criar arquivo.\n\n");
+    }
 
     printf ("Fim do programa.");
+    free (fileName);
+    free (desc);
     free (picRGB._img);
     free (picRGB.img);
     free (picgray._img);
@@ -94,3 +110,25 @@ imgRGB alocaImagemRGB (int nLin, int nCol){
     return pic;
 }
 
+int saveImgGray (imgGray img, char desc[], char fileName[]){
+    char *nomeArq = (char*) malloc (80 * sizeof(char));
+    strcpy (nomeArq, fileName);
+    strcat (nomeArq, ".hed");
+    FILE *arq;
+    arq = fopen (fileName, "w");
+    if (arq){
+        fprintf (arq, "Tipo da imagem: Gray\n");
+        fprintf (arq, "Linhas: %d - Colunas: %d\n", img.nLin, img.nCol);
+        fprintf (arq, "%s", desc);
+        fclose (arq);
+        free (nomeArq);
+        return 1;
+    }
+    else{
+        perror ("Erro ao abrir arquivo.\n\n");
+        free (nomeArq);
+        return 0;
+    }
+}
+
+        //fprintf (arq, "Arquivo onde estao as intensidades: "");
