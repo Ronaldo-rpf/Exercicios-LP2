@@ -132,3 +132,21 @@ int saveImgGray (imgGray img, char desc[], char fileName[]){
 }
 
         //fprintf (arq, "Arquivo onde estao as intensidades: "");
+
+        
+int saveImgGray (imgGray img, char desc[], char fileName[]){
+    strcat (fileName, ".hed");
+    FILE *arq;
+    arq = fopen (fileName, "w");
+    if (arq){
+        fprintf (arq, "Tipo da imagem: Gray\n");
+        fprintf (arq, "Linhas: %d - Colunas: %d\n", img.nLin, img.nCol);
+        fprintf (arq, "%s", desc);
+        fclose (arq);
+        return 1;
+    }
+    else{
+        perror ("Erro ao abrir arquivo.\n\n");
+        return 0;
+    }
+}
