@@ -35,6 +35,8 @@ imgRGB alocaImagemRGB (int nLin, int nCol);
 
 int saveImgGray (imgGray img, char desc[], char fileName[]);
 
+int saveImgRGB(imgRGB img, char desc[], char fileName[]);
+
 int main (){
     int aux;
     imgGray picgray;
@@ -50,9 +52,14 @@ int main (){
         return 1;
     }
 
+    
     for (int i=0;i<50;i++){
-        picgray._img[i] = 49;
+        picRGB._img[i].R = 180;
+        picRGB._img[i].G = 30;
+        picRGB._img[i].B = 100;
+    
     }
+
 
     char *desc, *fileName;
     desc = (char*) calloc (80, sizeof(char));
@@ -65,7 +72,7 @@ int main (){
 
     fileName[strcspn(fileName, "\n")] = '\0';
 
-    aux = saveImgGray (picgray, desc, fileName);
+    aux = saveImgRGB (picRGB, desc, fileName);
 
     if (aux){
         printf ("Arquivos criados com sucesso.\n\n");
@@ -145,18 +152,62 @@ int saveImgGray (imgGray img, char desc[], char fileName[]){
 
     arqbin = fopen (fileNameB, "wb");
     if (arqbin){
-        if (fwrite (img._img, sizeof(uchar), img.nLin * img.nCol, arqbin) == img.nLin * img.nCol){
-            int aux = fclose (arqbin);
-            if (aux){
+        fwrite (img._img, sizeof(uchar), img.nLin * img.nCol, arqbin);
+        int aux = fclose (arqbin);
+        if (aux){
+            printf ("Erro ao fechar arquivo binario.\n\n");
+            free(fileNameB);
+            return 0;
+        }
+        free(fileNameB);
+        return 1;
+    }
+    else{
+        perror ("Erro ao abrir arquivo binario.\n\n");
+        free(fileNameB);
+        return 0;
+    }
+}
+
+int saveImgRGB(imgRGB img, char desc[], char fileName[]){
+    char *fileNameB = (char*) calloc (30, sizeof(char));
+    strcpy (fileNameB, fileName);
+    strcat (fileNameB, ".img");
+    strcat(fileName, ".hed");
+    FILE *arqbin, *arqhed;
+    arqhed = fopen(fileName, "w");
+    if (arqhed){
+        fprintf (arqhed, "Tipo da imagem: RGB\n");
+        fprintf (arqhed, "Linhas: %d - Colunas: %d\n", img.nLin, img.nCol);
+        fprintf (arqhed, "%s", desc);
+        fprintf (arqhed, "Arquivo binario: %s", fileNameB);
+        int aux = fclose(arqhed);
+        if (aux){
+            printf ("Erro ao fechar arquivo .hed.\n\n");
+            free(fileNameB);
+            return 0;
+        }
+    }
+    else{
+        printf ("Erro ao abrir arquivo .hed.\n\n");
+        free(fileNameB);
+        return 0;
+    }
+
+    arqbin = fopen (fileNameB, "wb");
+    if (arqbin){
+        if (fwrite(img._img, sizeof(tRGB), img.nCol * img.nLin, arqbin) == img.nCol * img.nLin){
+            int aux = fclose(arqbin);
+            if (aux == 1){
                 printf ("Erro ao fechar arquivo binario.\n\n");
-                free(fileNameB);
+                free (fileNameB);
                 return 0;
             }
             free(fileNameB);
             return 1;
         }
     }
-    perror ("Erro ao abrir arquivo binario.\n\n");
-    free(fileNameB);
+    printf ("Erro ao abrir arquivo binario.\n\n");
+    free (fileNameB);
     return 0;
 }

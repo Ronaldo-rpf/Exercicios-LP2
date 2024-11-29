@@ -35,6 +35,10 @@ imgRGB alocaImagemRGB (int nLin, int nCol);
 
 int saveImgGray (imgGray img, char desc[], char fileName[]);
 
+int saveImgRGB(imgRGB img, char desc[], char fileName[]);
+
+int loadHead(char fileName[], char desc[]);
+
 int main (){
     int aux;
     imgGray picgray;
@@ -49,29 +53,26 @@ int main (){
         printf ("Erro ao alocar imagem RGB.\n\n");
         return 1;
     }
-
-    for (int i=0;i<50;i++){
-        picgray._img[i] = 49;
-    }
-
-    char *desc, *fileName;
-    desc = (char*) calloc (80, sizeof(char));
+    char *fileName, *desc;
     fileName = (char*) calloc (30, sizeof(char));
-    printf ("Descricao da imagem: ");
-    fgets (desc, 80, stdin);
-    fflush(stdin);
-    printf ("Nome do arquivo: ");
+    desc = (char*) calloc (80, sizeof(char));
+    
+    printf("Nome do arquivo (sem extensao): ");
     fgets (fileName, 30, stdin);
-
     fileName[strcspn(fileName, "\n")] = '\0';
 
-    aux = saveImgGray (picgray, desc, fileName);
+    aux = loadHead (fileName, desc);
 
-    if (aux){
-        printf ("Arquivos criados com sucesso.\n\n");
+    if (aux == 0){
+        printf ("Erro ao carregar cabecalho de imagem.\n\n");
     }
-    else{
-        printf ("Erro ao criar arquivos.\n\n");
+    else if (aux == 1){
+        printf ("Imagem do tipo Gray.\n");
+        printf ("Descricao: %sNome do arquivo: %s\n", desc, fileName);
+    }
+    else if (aux == 2){
+        printf ("Imagem do tipo RGB.\n");
+        printf ("Descricao: %sNome do arquivo: %s\n", desc, fileName);
     }
 
     printf ("Fim do programa.");
@@ -145,18 +146,87 @@ int saveImgGray (imgGray img, char desc[], char fileName[]){
 
     arqbin = fopen (fileNameB, "wb");
     if (arqbin){
-        if (fwrite (img._img, sizeof(uchar), img.nLin * img.nCol, arqbin) == img.nLin * img.nCol){
-            int aux = fclose (arqbin);
-            if (aux){
-                printf ("Erro ao fechar arquivo binario.\n\n");
-                free(fileNameB);
-                return 0;
-            }
+        fwrite (img._img, sizeof(uchar), img.nLin * img.nCol, arqbin);
+        int aux = fclose (arqbin);
+        if (aux){
+            printf ("Erro ao fechar arquivo binario.\n\n");
             free(fileNameB);
-            return 1;
+            return 0;
+        }
+        free(fileNameB);
+        return 1;
+    }
+    else{
+        perror ("Erro ao abrir arquivo binario.\n\n");
+        free(fileNameB);
+        return 0;
+    }
+}
+
+int saveImgRGB(imgRGB img, char desc[], char fileName[]){
+    char *fileNameB = (char*) calloc (30, sizeof(char));
+    strcpy (fileNameB, fileName);
+    strcat (fileNameB, ".img");
+    strcat(fileName, ".hed");
+    FILE *arqbin, *arqhed;
+    arqhed = fopen(fileName, "w");
+    if (arqhed){
+        fprintf (arqhed, "Tipo da imagem: RGB\n");
+        fprintf (arqhed, "Linhas: %d - Colunas: %d\n", img.nLin, img.nCol);
+        fprintf (arqhed, "%s", desc);
+        fprintf (arqhed, "Arquivo binario: %s", fileNameB);
+        int aux = fclose(arqhed);
+        if (aux){
+            printf ("Erro ao fechar arquivo .hed.\n\n");
+            free(fileNameB);
+            return 0;
         }
     }
-    perror ("Erro ao abrir arquivo binario.\n\n");
-    free(fileNameB);
-    return 0;
+    else{
+        printf ("Erro ao abrir arquivo .hed.\n\n");
+        free(fileNameB);
+        return 0;
+    }
+
+    arqbin = fopen (fileNameB, "wb");
+    if (arqbin){
+        fwrite(img._img, sizeof(tRGB), img.nCol * img.nLin, arqbin);
+        int aux = fclose(arqbin);
+        if (aux){
+            printf ("Erro ao fechar arquivo binario.\n\n");
+            free (fileNameB);
+            return 0;
+        }
+        free(fileNameB);
+        return 1;
+    }
+    else{
+        printf ("Erro ao abrir arquivo binario.\n\n");
+        free (fileNameB);
+        return 0;
+    }
+
+}
+
+int loadHead(char fileName[], char desc[]){
+    strcat(fileName, ".hed");
+    FILE *arq;
+    arq = fopen (fileName, "r");
+    if (arq){
+        fgets (desc, 80, arq);
+        if (strcmp (desc, "Tipo da imagem: Gray\n") == 0){
+            fgets(desc, 80, arq);
+            fgets(desc, 80, arq);
+            return 1;
+        }
+        else{
+            fgets(desc, 80, arq);
+            fgets(desc, 80, arq);
+            return 2;
+        }
+    }
+    else{
+        printf ("Erro ao tentar abrir o arquivo.\n\n");
+        return 0;
+    }
 }
